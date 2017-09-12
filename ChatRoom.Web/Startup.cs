@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ChatRoom.Domain.Entities.User;
 using ChatRoom.Domain;
-using System;
-using Microsoft.AspNetCore.Http;
+using ChatRoom.Infrastructure;
+using ChatRoom.Web.Extensions;
 
 namespace ChatRoom_Web
 {
@@ -40,11 +40,17 @@ namespace ChatRoom_Web
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             });
+
+            services.AddTransient<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
+
+            services.AddApplicationInfrastructure();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            AppServiceProvider.Provider = app.ApplicationServices;
+
             using (var dbContext = new DesignTimeDbContextFactory().CreateDbContext(null))
             {
                 dbContext.Database.Migrate();

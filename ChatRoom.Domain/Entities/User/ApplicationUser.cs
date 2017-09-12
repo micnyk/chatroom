@@ -2,7 +2,8 @@
 
 namespace ChatRoom.Domain.Entities.User
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<string>
     {
+        public bool IsGuest { get; set; }
     }
 }
