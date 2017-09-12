@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using ChatRoom.Domain.Entities.User;
 using ChatRoom.Infrastructure;
 using ChatRoom.Infrastructure.CQS.Command;
@@ -12,10 +13,12 @@ namespace ChatRoom.Users.Handlers
         : ICommandHandler<CreateUserCommand, CreateUserResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserCommandsHandler(UserManager<ApplicationUser> userManager)
+        public UserCommandsHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public CreateUserResult Handle(CreateUserCommand command)
@@ -49,6 +52,8 @@ namespace ChatRoom.Users.Handlers
                     };
                 }
             }
+
+            Task.Run(() => _signInManager.SignInAsync(user, true)).Wait();
 
             return new CreateUserResult
             {

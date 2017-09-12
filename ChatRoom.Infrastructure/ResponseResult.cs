@@ -6,8 +6,6 @@
 
         Error,
 
-        ModelNotValid,
-
-        Redirect
+        ModelNotValid
     }
 }

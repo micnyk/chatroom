@@ -7,6 +7,6 @@ namespace ChatRoom.Web.Controllers
     public class UserController : BaseController
     {
         [HttpPost("")]
-        public IActionResult CreateUser(CreateUserCommand command) => ProcessCommand(command);
+        public IActionResult CreateUser([FromBody] CreateUserCommand command) => ProcessCommand(command);
     }
 }
