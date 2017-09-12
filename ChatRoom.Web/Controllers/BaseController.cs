@@ -1,24 +1,37 @@
 ﻿using System;
 using ChatRoom.Infrastructure;
 using ChatRoom.Infrastructure.CQS.Command;
+using ChatRoom.Infrastructure.CQS.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoom.Web.Controllers
 {
     public class BaseController : Controller
     {
-        public IActionResult ProcessCommand<TResult>(ICommand<TResult> command) where TResult: ICommandResult
+        public IActionResult ProcessCommand<TResult>(ICommand<TResult> command) where TResult : ICommandResult
         {
-            if(!(HttpContext.RequestServices.GetService(typeof(IRequestProcessor)) is IRequestProcessor requestProcessor))
-                throw new InvalidOperationException();
+            var bus = GetBus();
 
-            var handler = HttpContext.RequestServices
-                .GetService(typeof(ICommandHandler<,>)
-                .MakeGenericType(command.GetType(), typeof(TResult)));
-
-            var result = requestProcessor.Process(command, handler, ModelState);
+            var result = bus.Process(command, ModelState);
 
             return Json(result);
+        }
+
+        public IActionResult ProcessQuery<TResult>(IQuery<TResult> query) where TResult : IQueryResult
+        {
+            var bus = GetBus();
+
+            var result = bus.Process(query);
+
+            return Json(result);
+        }
+
+        private IBus GetBus()
+        {
+            if (!(HttpContext.RequestServices.GetService(typeof(IBus)) is IBus bus))
+                throw new InvalidOperationException();
+
+            return bus;
         }
     }
 }

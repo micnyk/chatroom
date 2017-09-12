@@ -1,16 +1,17 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using ChatRoom.Domain.Entities.User;
-using ChatRoom.Infrastructure;
 using ChatRoom.Infrastructure.CQS.Command;
 using ChatRoom.Users.Commands;
 using ChatRoom.Users.Dtos;
 using Microsoft.AspNetCore.Identity;
+using SignInResult = ChatRoom.Users.Dtos.SignInResult;
 
 namespace ChatRoom.Users.Handlers
 {
-    public class UserCommandsHandler
-        : ICommandHandler<CreateUserCommand, CreateUserResult>
+    public class UserCommandsHandler : 
+        ICommandHandler<RegisterCommand, RegisterResult>, 
+        ICommandHandler<SignInCommand, SignInResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -21,7 +22,7 @@ namespace ChatRoom.Users.Handlers
             _signInManager = signInManager;
         }
 
-        public CreateUserResult Handle(CreateUserCommand command)
+        public RegisterResult Handle(RegisterCommand command)
         {
             var user = new ApplicationUser
             {
@@ -32,7 +33,7 @@ namespace ChatRoom.Users.Handlers
             var createUserResult = _userManager.CreateAsync(user).Result;
 
             if (!createUserResult.Succeeded)
-                return new CreateUserResult
+                return new RegisterResult
                 {
                     Success = false,
                     Errors = createUserResult.Errors.Select(x => x.Description).ToArray()
@@ -45,7 +46,7 @@ namespace ChatRoom.Users.Handlers
                 if (!addPasswordResult.Succeeded)
                 {
                     var deleteUserResult = _userManager.DeleteAsync(user).Result;
-                    return new CreateUserResult
+                    return new RegisterResult
                     {
                         Success = false,
                         Errors = addPasswordResult.Errors.Select(x => x.Description).ToArray()
@@ -55,7 +56,7 @@ namespace ChatRoom.Users.Handlers
 
             Task.Run(() => _signInManager.SignInAsync(user, true)).Wait();
 
-            return new CreateUserResult
+            return new RegisterResult
             {
                 Success = true,
                 User = new UserDto
@@ -65,6 +66,18 @@ namespace ChatRoom.Users.Handlers
                     UserName = user.UserName
                 }
             };
+        }
+
+        public SignInResult Handle(SignInCommand command)
+        {
+            var user = _userManager.FindByNameAsync(command.UserName).Result;
+
+            if (user == null)
+                return new SignInResult {Success = false};
+
+            var result = _signInManager.PasswordSignInAsync(user, command.Password, true, false).Result;
+
+            return new SignInResult {Success = result.Succeeded};
         }
     }
 }

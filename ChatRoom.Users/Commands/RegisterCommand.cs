@@ -5,12 +5,12 @@ using ChatRoom.Users.Dtos;
 
 namespace ChatRoom.Users.Commands
 {
-    public class CreateUserCommand : ICommand<CreateUserResult>
+    public class RegisterCommand : ICommand<RegisterResult>
     {
-        [Required, MinLength(3), MaxLength(50)]
-        [DisplayName("User name")]
+        [DisplayName("User Name")]
         public string UserName { get; set; }
 
+        [DisplayName("Password")]
         public string Password { get; set; }
 
         public bool IsGuest { get; set; }

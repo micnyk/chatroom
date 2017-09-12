@@ -2,7 +2,7 @@
 
 namespace ChatRoom.Users.Dtos
 {
-    public class CreateUserResult : ICommandResult
+    public class RegisterResult : ICommandResult
     {
         public bool Success { get; set; }
 

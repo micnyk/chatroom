@@ -6,7 +6,10 @@ namespace ChatRoom.Web.Controllers
     [Route("/api/user")]
     public class UserController : BaseController
     {
-        [HttpPost("")]
-        public IActionResult CreateUser([FromBody] CreateUserCommand command) => ProcessCommand(command);
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] RegisterCommand command) => ProcessCommand(command);
+
+        [HttpPost("signIn")]
+        public IActionResult SignIn([FromBody] SignInCommand command) => ProcessCommand(command);
     }
 }

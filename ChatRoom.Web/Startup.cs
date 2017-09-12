@@ -2,8 +2,11 @@ using ChatRoom.Domain;
 using ChatRoom.Domain.Entities.User;
 using ChatRoom.Infrastructure;
 using ChatRoom.Web.Extensions;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -41,19 +44,15 @@ namespace ChatRoom.Web
                 options.Password.RequireLowercase = false;
             });
 
-            services.AddApplicationInfrastructure();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //services.AddTransient<IUserValidator<ApplicationUser>, UserValidator<ApplicationUser>>();
-            //services.AddTransient<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
-            //services.AddTransient<IdentityErrorDescriber>();
-            //services.AddTransient<DbContext, ApplicationDbContext>(
-            //    serviceProvider => new ApplicationDbContext(new DbContextOptionsBuilder()
-            //        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            //        .Options));
-            //services.AddTransient<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
-            //services.AddTransient<UserManager<ApplicationUser>>();
+            services.AddInfrastructure();
 
-            services.AddMvc();
+            services
+                .AddMvc()
+                .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
+
+            services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

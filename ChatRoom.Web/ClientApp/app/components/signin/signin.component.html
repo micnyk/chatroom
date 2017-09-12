@@ -1,13 +1,11 @@
-<div class="col-md-8">
-    <h1>Sign In</h1>
-    <div class="form-group required" [ngClass]="{'has-error': signInForm.controls['userName'].touched && !signInForm.controls['userName'].valid}">
-        <label class="control-label" for="userName">User name:</label>
-        <input class="form-control" type="text" id="userName" [formControl]="signInForm.controls['userName']"/>
-        <div class="alert alert-danger" *ngIf="!signInForm.controls['userName'].valid && signInForm.controls['userName'].touched">User name length must contain between 3-50 characters</div>
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="password">Password:</label>
-        <input class="form-control" type="password" id="password" [formControl]="signInForm.controls['password']"/>
-    </div>
-    <button class="btn btn-primary" [disabled]="!signInForm.valid" (click)="signIn()">SIGN IN</button>
+<h1>Sign In</h1>
+<div class="form-group" [ngClass]="{'has-error': signInForm.controls['userName'].touched && !signInForm.controls['userName'].valid}">
+    <label class="control-label" for="userName">User Name:</label>
+    <input class="form-control" type="text" id="userName" [formControl]="signInForm.controls['userName']" />
+    <div class="alert alert-danger" *ngIf="!signInForm.controls['userName'].valid && signInForm.controls['userName'].touched">User name length must contain between 3-50 characters</div>
 </div>
+<div class="form-group">
+    <label class="control-label" for="password">Password:</label>
+    <input class="form-control" type="password" id="password" [formControl]="signInForm.controls['password']" />
+</div>
+<button class="btn btn-primary" [disabled]="!signInForm.valid" (click)="signIn()">SIGN IN</button>

@@ -10,10 +10,13 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { SignInComponent } from "./components/signin/signin.component";
+import { RegisterComponent } from "./components/register/register.component";
+
 import { SignInGuard } from "./guards/signInGuard";
+
 import { ApiService } from "./services/api/apiService";
 import { UserService } from "./services/user/userService";
-import {UrlService} from "./services/url/urlService";
+import { UrlService } from "./services/url/urlService";
 
 
 @NgModule({
@@ -23,7 +26,8 @@ import {UrlService} from "./services/url/urlService";
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        SignInComponent
+        SignInComponent,
+        RegisterComponent
     ],
     imports: [
         CommonModule,

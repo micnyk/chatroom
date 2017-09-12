@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {UserService} from "../../services/user/userService";
+import { UserService } from "../../services/user/userService";
 import { Observable } from 'rxjs';
 
 @Component({
     selector: 'signin',
     templateUrl: './signin.component.html',
-    //styleUrls: ['./signin.component.css']
 })
 export class SignInComponent {
     signInForm: FormGroup;
@@ -20,7 +19,9 @@ export class SignInComponent {
 
     public signIn(): void {
         const model = this.signInForm.value;
-        this.userService.signIn(model.userName, model.password).subscribe(response => console.log(response));
 
+        this.userService
+            .signIn(model.userName, model.password)
+            .subscribe(result => { });
     }
 }
