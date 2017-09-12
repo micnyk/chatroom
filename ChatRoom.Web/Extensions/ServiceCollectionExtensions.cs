@@ -11,10 +11,9 @@ namespace ChatRoom.Web.Extensions
     {
         public static IServiceCollection AddApplicationInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<ICommandProcessor, CommandProcessor>();
             services.AddTransient<IRequestProcessor, RequestProcessor>();
 
-            services.AddTransient<ICommandHandler<CreateUserCommand, UserDto>, UserCommandsHandler>();
+            services.AddTransient<ICommandHandler<CreateUserCommand, CreateUserResult>, UserCommandsHandler>();
 
             return services;
         }

@@ -1,16 +1,17 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using ChatRoom.Domain.Entities.User;
 using ChatRoom.Domain;
+using ChatRoom.Domain.Entities.User;
 using ChatRoom.Infrastructure;
 using ChatRoom.Web.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ChatRoom_Web
+namespace ChatRoom.Web
 {
     public class Startup
     {
@@ -24,13 +25,12 @@ namespace ChatRoom_Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient, ServiceLifetime.Scoped);
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddMvc();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -41,9 +41,19 @@ namespace ChatRoom_Web
                 options.Password.RequireLowercase = false;
             });
 
-            services.AddTransient<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
-
             services.AddApplicationInfrastructure();
+
+            //services.AddTransient<IUserValidator<ApplicationUser>, UserValidator<ApplicationUser>>();
+            //services.AddTransient<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
+            //services.AddTransient<IdentityErrorDescriber>();
+            //services.AddTransient<DbContext, ApplicationDbContext>(
+            //    serviceProvider => new ApplicationDbContext(new DbContextOptionsBuilder()
+            //        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            //        .Options));
+            //services.AddTransient<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
+            //services.AddTransient<UserManager<ApplicationUser>>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +82,7 @@ namespace ChatRoom_Web
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

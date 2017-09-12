@@ -1,8 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ChatRoom.Web.Controllers;
 
-namespace ChatRoom_Web.Controllers
+namespace ChatRoom.Web.Controllers
 {
     public class HomeController : BaseController
     {

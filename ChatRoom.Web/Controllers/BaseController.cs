@@ -1,16 +1,24 @@
-﻿using ChatRoom.Infrastructure;
-using ChatRoom.Users.Commands;
+﻿using System;
+using ChatRoom.Infrastructure;
+using ChatRoom.Infrastructure.CQS.Command;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoom.Web.Controllers
 {
     public class BaseController : Controller
     {
-        public BaseController()
+        public IActionResult ProcessCommand<TResult>(ICommand<TResult> command) where TResult: ICommandResult
         {
-            var requestProcessor = AppServiceProvider.Provider.GetService(typeof(IRequestProcessor)) as IRequestProcessor;
+            if(!(HttpContext.RequestServices.GetService(typeof(IRequestProcessor)) is IRequestProcessor requestProcessor))
+                throw new InvalidOperationException();
 
-            var x = requestProcessor.Process(new CreateUserCommand { UserName = "ddd" });
+            var handler = HttpContext.RequestServices
+                .GetService(typeof(ICommandHandler<,>)
+                .MakeGenericType(command.GetType(), typeof(TResult)));
+
+            var result = requestProcessor.Process(command, handler, ModelState);
+
+            return Json(result);
         }
     }
 }

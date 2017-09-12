@@ -1,4 +1,6 @@
-﻿using ChatRoom.Domain.Entities.User;
+﻿using System.Linq;
+using ChatRoom.Domain.Entities.User;
+using ChatRoom.Infrastructure;
 using ChatRoom.Infrastructure.CQS.Command;
 using ChatRoom.Users.Commands;
 using ChatRoom.Users.Dtos;
@@ -6,8 +8,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ChatRoom.Users.Handlers
 {
-    public class UserCommandsHandler 
-        : ICommandHandler<CreateUserCommand, UserDto>
+    public class UserCommandsHandler
+        : ICommandHandler<CreateUserCommand, CreateUserResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -16,7 +18,7 @@ namespace ChatRoom.Users.Handlers
             _userManager = userManager;
         }
 
-        public UserDto Handle(CreateUserCommand command)
+        public CreateUserResult Handle(CreateUserCommand command)
         {
             var user = new ApplicationUser
             {
@@ -24,7 +26,40 @@ namespace ChatRoom.Users.Handlers
                 UserName = command.UserName
             };
 
-            throw new System.NotImplementedException();
+            var createUserResult = _userManager.CreateAsync(user).Result;
+
+            if (!createUserResult.Succeeded)
+                return new CreateUserResult
+                {
+                    Success = false,
+                    Errors = createUserResult.Errors.Select(x => x.Description).ToArray()
+                };
+
+            if (!command.IsGuest)
+            {
+                var addPasswordResult = _userManager.AddPasswordAsync(user, command.Password).Result;
+
+                if (!addPasswordResult.Succeeded)
+                {
+                    var deleteUserResult = _userManager.DeleteAsync(user).Result;
+                    return new CreateUserResult
+                    {
+                        Success = false,
+                        Errors = addPasswordResult.Errors.Select(x => x.Description).ToArray()
+                    };
+                }
+            }
+
+            return new CreateUserResult
+            {
+                Success = true,
+                User = new UserDto
+                {
+                    Id = user.Id,
+                    IsGuest = user.IsGuest,
+                    UserName = user.UserName
+                }
+            };
         }
     }
 }
