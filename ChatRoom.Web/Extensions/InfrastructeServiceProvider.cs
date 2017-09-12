@@ -17,6 +17,7 @@ namespace ChatRoom.Web.Extensions
 
             services.AddTransient<ICommandHandler<RegisterCommand, RegisterResult>, UserCommandsHandler>();
             services.AddTransient<ICommandHandler<SignInCommand, SignInResult>, UserCommandsHandler>();
+            services.AddTransient<ICommandHandler<SignOutCommand, SignOutResult>, UserCommandsHandler>();
             services.AddTransient<IQueryHandler<CheckUserNameUniquenessQuery, CheckUserNameUniquenessResult>, UserQueriesHandler>();
 
             return services;

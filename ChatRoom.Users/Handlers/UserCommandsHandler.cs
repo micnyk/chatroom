@@ -4,6 +4,7 @@ using ChatRoom.Domain.Entities.User;
 using ChatRoom.Infrastructure.CQS.Command;
 using ChatRoom.Users.Commands;
 using ChatRoom.Users.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using SignInResult = ChatRoom.Users.Dtos.SignInResult;
 
@@ -11,15 +12,18 @@ namespace ChatRoom.Users.Handlers
 {
     public class UserCommandsHandler : 
         ICommandHandler<RegisterCommand, RegisterResult>, 
-        ICommandHandler<SignInCommand, SignInResult>
+        ICommandHandler<SignInCommand, SignInResult>,
+        ICommandHandler<SignOutCommand, SignOutResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public UserCommandsHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserCommandsHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _contextAccessor = contextAccessor;
         }
 
         public RegisterResult Handle(RegisterCommand command)
@@ -77,7 +81,30 @@ namespace ChatRoom.Users.Handlers
 
             var result = _signInManager.PasswordSignInAsync(user, command.Password, true, false).Result;
 
-            return new SignInResult {Success = result.Succeeded};
+            return new SignInResult
+            {
+                Success = result.Succeeded,
+                User = new UserDto
+                {
+                    Id = user.Id,
+                    IsGuest = user.IsGuest,
+                    UserName = user.UserName
+                }
+            };
+        }
+
+        public SignOutResult Handle(SignOutCommand command)
+        {
+            Task.Run(() => _signInManager.SignOutAsync()).Wait();
+
+            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result;
+
+            if (user != null && user.IsGuest)
+            {
+                var deleteResult = _userManager.DeleteAsync(user).Result;
+            }
+
+            return new SignOutResult();
         }
     }
 }

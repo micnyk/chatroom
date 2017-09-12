@@ -27,6 +27,11 @@
                         <span class='glyphicon glyphicon-th-list'></span> Fetch data
                     </a>
                 </li>
+                <li *ngIf="appState.signedIn">
+                    <a href="#" (click)="signOut()">
+                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

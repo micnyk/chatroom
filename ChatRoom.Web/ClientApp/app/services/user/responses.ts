@@ -5,3 +5,11 @@ export class RegisterResult {
     user: UserDto;
     errors: Array<string>;
 }
+
+export class SignInResult {
+    success: boolean;
+    user: UserDto;
+}
+
+export class SignOutResult {
+}

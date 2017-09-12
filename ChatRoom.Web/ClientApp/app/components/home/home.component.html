@@ -1,7 +1,13 @@
-<div class="col-md-6">
-    <signin></signin>
+<div class="col-md-12" *ngIf="!appState.signedIn">
+    <div class="col-sm-6">
+        <signin></signin>
+    </div>
+
+    <div class="col-sm-6">
+        <register></register>
+    </div>
 </div>
 
-<div class="col-md-6">
-    <register></register>
+<div class="col-md-12" *ngIf="appState.signedIn">
+    chat list
 </div>

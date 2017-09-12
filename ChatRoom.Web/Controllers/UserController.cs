@@ -11,5 +11,8 @@ namespace ChatRoom.Web.Controllers
 
         [HttpPost("signIn")]
         public IActionResult SignIn([FromBody] SignInCommand command) => ProcessCommand(command);
+
+        [HttpPost("signOut")]
+        public IActionResult SignOut([FromBody] SignOutCommand command) => ProcessCommand(command);
     }
 }

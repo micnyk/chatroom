@@ -1,14 +1,11 @@
 <h1>Register</h1>
-<div class="form-group required" [ngClass]="{'has-error': registerForm.controls['userName'].touched && !registerForm.controls['userName'].valid}">
+<div class="form-group" [ngClass]="{'has-error': registerForm.controls['userName'].touched && !registerForm.controls['userName'].valid}">
     <label class="control-label" for="userName">User Name:</label>
     <input class="form-control" type="text" id="userName" [formControl]="registerForm.controls['userName']" />
     <div class="alert alert-danger" *ngIf="!registerForm.controls['userName'].valid && registerForm.controls['userName'].touched">User name length must contain between 3-50 characters</div>
 </div>
-<div class="checkbox">
-    <label><input type="checkbox">Sign in back with your User Name</label>
-</div>
-<div class="form-group" [hidden]="hidePassword">
-    <label class="control-label" for="password">Password:</label>
+<div class="form-group">
+    <label class="control-label" for="password">Password (provide to save your User Name):</label>
     <input class="form-control" type="password" id="password" [formControl]="registerForm.controls['password']" />
 </div>
-<button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="signIn()">SIGN IN</button>
+<button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="register()">REGISTER</button>

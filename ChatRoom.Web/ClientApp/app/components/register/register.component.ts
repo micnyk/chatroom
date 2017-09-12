@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {UserService} from "../../services/user/userService";
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import { UserService } from "../../services/user/userService";
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,14 +13,18 @@ export class RegisterComponent {
     constructor(fb: FormBuilder, private userService: UserService) {
         this.registerForm = fb.group({
             "userName": [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
-            "password": [null],
-            "isGuest": [null]
+            "password": [null]
         });
     }
 
-    //public signIn(): void {
-    //    const model = this.signInForm.value;
-    //    let x = this.userService.signIn(model.userName, model.password);
-    //    x.subscribe(response => console.log(response));
-    //}
+    public register(): void {
+        const model = this.registerForm.value;
+
+        const password = (model.password as string);
+        const isGuest = password == null || password.length > 0;
+
+        this.userService
+            .register(isGuest, model.userName, isGuest ? null : model.password)
+            .subscribe(response => { });
+    }
 }

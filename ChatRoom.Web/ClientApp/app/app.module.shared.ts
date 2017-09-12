@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { CookieModule } from 'ngx-cookie';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -11,6 +12,8 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { SignInComponent } from "./components/signin/signin.component";
 import { RegisterComponent } from "./components/register/register.component";
+
+import { AppState } from "./services/api/appState";
 
 import { SignInGuard } from "./guards/signInGuard";
 
@@ -40,9 +43,10 @@ import { UrlService } from "./services/url/urlService";
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
-        ])
+        ]),
+        CookieModule.forRoot()
     ],
-    providers: [SignInGuard, UrlService, ApiService, UserService]
+    providers: [AppState, SignInGuard, UrlService, ApiService, UserService]
 })
 export class AppModuleShared {
 }
