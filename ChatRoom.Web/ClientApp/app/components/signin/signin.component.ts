@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../services/user/userService";
 import { Observable } from 'rxjs';
+import { SignInResult } from "../../services/user/responses";
 
 @Component({
     selector: 'signin',
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class SignInComponent {
     signInForm: FormGroup;
+    signInResult: SignInResult;
 
     constructor(fb: FormBuilder, private userService: UserService) {
         this.signInForm = fb.group({
@@ -22,6 +24,6 @@ export class SignInComponent {
 
         this.userService
             .signIn(model.userName, model.password)
-            .subscribe(result => { });
+            .subscribe(result => { this.signInResult = result });
     }
 }

@@ -9,3 +9,4 @@
     <input class="form-control" type="password" id="password" [formControl]="signInForm.controls['password']" />
 </div>
 <button class="btn btn-primary" [disabled]="!signInForm.valid" (click)="signIn()">SIGN IN</button>
+<div class="alert alert-danger" *ngIf="signInResult && !signInResult.success">Failed to sign in, check your User Name and Password</div>
