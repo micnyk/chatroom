@@ -1,4 +1,6 @@
 ﻿export class ChatMessage {
-    constructor(public userName: string,
+    constructor(
+                public roomId: string,
+                public userName: string,
                 public message: string) { }
 }

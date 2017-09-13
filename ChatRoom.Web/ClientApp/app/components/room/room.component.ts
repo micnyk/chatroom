@@ -34,6 +34,10 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.messageSubscription.unsubscribe();
+        this.messages = [];
+        this.message = <any>null;
+        this.room = <any>null;
+        this.chatService.disconnectFromRoom();
     }
 
     sendMessage() {
@@ -42,7 +46,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     }
 
     private displayMessage(message: ChatMessage) {
-        if (message != null)
+        if (message != null && message.roomId === this.room.id)
             this.messages.push(message);
     }
 }

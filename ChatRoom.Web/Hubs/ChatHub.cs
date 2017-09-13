@@ -21,14 +21,6 @@ namespace ChatRoom.Web.Hubs
             _bus = bus;
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            var usersOnline = await _userTracker.UsersOnline();
-            await SendRoomsOnlineUsers(usersOnline);
-
-            await base.OnConnectedAsync();
-        }
-
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var user = await _userTracker.GetUser(Context.Connection);
@@ -43,7 +35,21 @@ namespace ChatRoom.Web.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task ConnectRoom(string roomId)
+        public async Task GetRoomsOnlineUsers()
+        {
+            var usersOnline = await _userTracker.UsersOnline();
+            await SendRoomsOnlineUsers(usersOnline);
+        }
+
+        public async Task DisconnectFromRoom()
+        {
+            var user = await _userTracker.GetUser(Context.Connection);
+
+            if (user != null)
+                await _userTracker.RemoveUser(Context.Connection);
+        }
+
+        public async Task ConnectToRoom(string roomId)
         {
             var user = await _userTracker.GetUser(Context.Connection);
 
@@ -66,7 +72,7 @@ namespace ChatRoom.Web.Hubs
             await SendRoomsOnlineUsers(usersOnline);
         }
 
-        public async Task Send(string roomId, string message)
+        public async Task SendMessage(string roomId, string message)
         {
             var onlineUsers = await _userTracker.UsersOnline();
             var roomUsers = onlineUsers.Where(x => x.RoomId == roomId).ToList();
@@ -74,7 +80,7 @@ namespace ChatRoom.Web.Hubs
             foreach (var user in roomUsers)
             {
                 var context = await _userTracker.GetUserContext(user);
-                await Clients.Client(context.ConnectionId).InvokeAsync("Message", message, Context.User.Identity.Name);
+                await Clients.Client(context.ConnectionId).InvokeAsync("Message", roomId, message, Context.User.Identity.Name);
             }
         }
 

@@ -46,8 +46,8 @@ export class ChatService {
             });
         });
 
-        this.hubConnection.on("Message", (message: string, userName: string) => {
-            this.messagesSubject.next(new ChatMessage(userName, message));
+        this.hubConnection.on("Message", (roomId: string, message: string, userName: string) => {
+            this.messagesSubject.next(new ChatMessage(roomId, userName, message));
         });
     }
 
@@ -59,11 +59,19 @@ export class ChatService {
             this.httpConnection.stop();
     }
 
-    connectRoom(roomId: string): void {
-        this.hubConnection.invoke("ConnectRoom", roomId);
+    connectToRoom(roomId: string): void {
+        this.hubConnection.invoke("ConnectToRoom", roomId);
+    }
+
+    disconnectFromRoom(): void {
+        this.hubConnection.invoke("DisconnectFromRoom");
     }
 
     sendMessage(roomId: string, message: string): void {
-        this.hubConnection.invoke("Send", roomId, message);
+        this.hubConnection.invoke("SendMessage", roomId, message);
+    }
+
+    updateOnlineUsers(): void {
+        this.hubConnection.invoke("GetRoomsOnlineUsers");
     }
 }

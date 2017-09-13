@@ -16,7 +16,10 @@ export class RoomsComponent implements OnInit {
     ngOnInit() {
         this.roomService
             .getAllRooms()
-            .subscribe(rooms => this.appState.rooms = rooms);
+            .subscribe(rooms => {
+                this.appState.rooms = rooms;
+                this.chatService.updateOnlineUsers();
+            });
     }
 
     canConnect(room: RoomDto): boolean {
@@ -29,7 +32,7 @@ export class RoomsComponent implements OnInit {
     connect(room: RoomDto): void {
         this.appState.connectedRooms = [];
         this.appState.connectedRooms.push(room);
-        this.chatService.connectRoom(room.id);
+        this.chatService.connectToRoom(room.id);
         this.router.navigate(["room", room.id]);
     }
 
@@ -42,6 +45,7 @@ export class RoomsComponent implements OnInit {
 
     disconnect(room: RoomDto): void {
         this.appState.connectedRooms = this.appState.connectedRooms.filter(r => r !== room);
+        this.chatService.disconnectFromRoom();
     }
 }
 
