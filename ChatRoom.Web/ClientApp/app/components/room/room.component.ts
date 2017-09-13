@@ -24,7 +24,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.route.params.subscribe(params => {
-            this.room = this.appState.connectedRooms.filter(r => r.id === params["id"])[0];
+            this.room = this.appState.rooms.filter(r => r.id === params["id"])[0];
         });
 
         this.messageSubscription = this.chatService

@@ -10,7 +10,7 @@ export class RoomGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.appState.connectedRooms
+        return this.appState.connectedRooms()
             .filter(r => r.id === route.params["id"])
             .length > 0;
 

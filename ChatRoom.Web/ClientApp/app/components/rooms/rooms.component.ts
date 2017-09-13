@@ -24,27 +24,26 @@ export class RoomsComponent implements OnInit {
 
     canConnect(room: RoomDto): boolean {
         return this.appState
-            .connectedRooms
+            .connectedRooms()
             .filter(r => r.id === room.id)
             .length === 0;
     }
 
     connect(room: RoomDto): void {
-        this.appState.connectedRooms = [];
-        this.appState.connectedRooms.push(room);
+        this.appState.rooms.filter(x => x.id === room.id)[0].connected = true;
         this.chatService.connectToRoom(room.id);
         this.router.navigate(["room", room.id]);
     }
 
     canDisconnect(room: RoomDto): boolean {
         return this.appState
-            .connectedRooms
+            .connectedRooms()
             .filter(r => r.id === room.id)
             .length > 0;
     }
 
     disconnect(room: RoomDto): void {
-        this.appState.connectedRooms = this.appState.connectedRooms.filter(r => r !== room);
+        this.appState.rooms.filter(x => x.id === room.id)[0].connected = false;
         this.chatService.disconnectFromRoom();
     }
 }

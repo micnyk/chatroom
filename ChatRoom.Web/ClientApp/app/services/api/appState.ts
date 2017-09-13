@@ -4,17 +4,16 @@ import { RoomDto, RoomsList } from "../room/responses";
 
 @Injectable()
 export class AppState {
-    rooms: RoomsList;
     currentUserId: string;
     loaded: boolean;
     signedIn: boolean;
-    connectedRooms: Array<RoomDto>;
+
+    rooms: RoomsList;
 
     setSignedInStateEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(private cookieService: CookieService) {
         this.rooms = [];
-        this.connectedRooms = [];
     }
 
     init(): void {
@@ -24,5 +23,9 @@ export class AppState {
             this.setSignedInStateEvent.emit(identityCookie);
             
         this.loaded = true;
+    }
+
+    connectedRooms(): RoomsList {
+        return this.rooms.filter(x => x.connected);
     }
 }
