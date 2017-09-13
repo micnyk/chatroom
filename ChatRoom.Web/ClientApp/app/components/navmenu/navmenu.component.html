@@ -12,7 +12,7 @@
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>
             <ul class='nav navbar-nav'>
-                <li [routerLinkActive]="['link-active']">
+                <li *ngIf="!appState.signedIn" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/home']">
                         <span class='glyphicon glyphicon-home'></span> Home
                     </a>
@@ -22,15 +22,7 @@
                         <span class='glyphicon glyphicon-th-list'></span> Chat rooms
                     </a>
                 </li>
-                <li *ngIf="appState.signedIn">
-                    <a href="/" (click)="signOut()">
-                        <span class="glyphicon glyphicon-log-out"></span> Logout
-                    </a>
-                </li>
-                <li *ngIf="appState.connectedRooms.length > 0">
-                    <p class="navbar-text"><span class="glyphicon glyphicon-inbox"></span> Connected Rooms</p>
-                </li>
-                <li>
+                <li *ngIf="appState.connectedRooms().length > 0">
                     <ul class='nav navbar-nav'>
                         <li *ngFor="let room of appState.connectedRooms()">
                             <a [routerLink]="['/room', room.id]">
@@ -38,6 +30,11 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li *ngIf="appState.signedIn">
+                    <a href="/" (click)="signOut()">
+                        <span class="glyphicon glyphicon-log-out"></span> Sign out
+                    </a>
                 </li>
             </ul>
         </div>

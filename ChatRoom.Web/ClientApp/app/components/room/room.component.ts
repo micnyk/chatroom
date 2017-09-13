@@ -6,6 +6,7 @@ import { AppState } from "../../services/api/appState";
 import { ChatService } from "../../services/chat/chatService";
 import { Subscription } from "rxjs/Subscription";
 import { ChatMessage } from "../../services/chat/chatMessage";
+import { ChatUserDetails } from "../../services/chat/chatUserDetails";
 
 @Component({
     selector: 'room',
@@ -18,6 +19,8 @@ export class RoomComponent implements OnInit, OnDestroy {
     messages: Array<ChatMessage> = [];
     message: string;
     messageSubscription: Subscription;
+    roomUsersSubscription: Subscription;
+    roomUsers: Array<ChatUserDetails> = [];
 
     constructor(private route: ActivatedRoute, private appState: AppState, private roomService: RoomService,
         private chatService: ChatService) { }
@@ -30,6 +33,13 @@ export class RoomComponent implements OnInit, OnDestroy {
         this.messageSubscription = this.chatService
             .messageObservable
             .subscribe(message => this.displayMessage(message));
+
+        this.roomUsersSubscription = this.chatService
+            .roomUsersObservable
+            .subscribe(user => {
+                if (user != null && this.roomUsers.filter(u => u.UserId === user.UserId).length === 0)
+                    this.roomUsers.push(user);
+            });
     }
 
     ngOnDestroy() {
@@ -37,6 +47,8 @@ export class RoomComponent implements OnInit, OnDestroy {
         this.messages = [];
         this.message = <any>null;
         this.room = <any>null;
+        this.roomUsersSubscription.unsubscribe();
+        this.roomUsers = [];
         this.chatService.disconnectFromRoom();
     }
 

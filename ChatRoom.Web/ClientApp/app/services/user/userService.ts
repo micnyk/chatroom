@@ -54,6 +54,7 @@ export class UserService {
 
         this.appState.signedIn = false;
         this.appState.currentUserId = <any>null;
+        this.appState.rooms = [];
         this.chatService.disconnectSignalR();
 
         return this.apiService

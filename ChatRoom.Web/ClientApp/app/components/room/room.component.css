@@ -1,6 +1,10 @@
-﻿.chat {
+﻿.room {
+    padding-bottom: 15px;
+}
+
+.chat {
     background-color: #ececec;
-    height: 500px;
+    height: 400px;
     overflow-y: scroll;
 }
 
@@ -10,4 +14,15 @@
 
 .chat li {
     list-style: none;
+}
+
+.usersList li {
+    list-style: none;
+    background-color: #f9f8d2;
+    display: inline-block;
+    padding: 5px;
+}
+
+.usersList li:not(:last-child) {
+    margin-right: 5px;
 }

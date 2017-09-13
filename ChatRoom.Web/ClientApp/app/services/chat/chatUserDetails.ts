@@ -1,4 +1,4 @@
 ﻿export class ChatUserDetails {
-    userId: string;
-    roomId: string;
+    UserId: string;
+    RoomId: string;
 }

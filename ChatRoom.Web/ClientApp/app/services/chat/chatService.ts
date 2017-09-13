@@ -19,6 +19,9 @@ export class ChatService {
     private messagesSubject: BehaviorSubject<ChatMessage> = new BehaviorSubject(<any>null);
     messageObservable = this.messagesSubject.asObservable();
 
+    private roomUsers: BehaviorSubject<ChatUserDetails> = new BehaviorSubject(<any>null);
+    roomUsersObservable = this.roomUsers.asObservable();
+
     connectSignalR(): void {
         this.disconnectSignalR();
 
@@ -35,7 +38,7 @@ export class ChatService {
         this.hubConnection.start().catch(err => console.log(err));
 
         this.hubConnection.on("RoomUsers", (users: Array<ChatUserDetails>) => {
-            console.log(users);
+            users.forEach(u => this.roomUsers.next(u));
         });
 
         this.hubConnection.on("RoomsOnlineUsers", (roomsDetails: Array<ChatRoomDetails>) => {

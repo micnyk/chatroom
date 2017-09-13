@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { UserService } from "../../services/user/userService";
 import { Observable } from 'rxjs';
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'register',
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 export class RegisterComponent {
     registerForm: FormGroup;
 
-    constructor(fb: FormBuilder, private userService: UserService) {
+    constructor(fb: FormBuilder, private userService: UserService, private router: Router) {
         this.registerForm = fb.group({
             "userName": [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
             "password": [null]
@@ -25,6 +26,9 @@ export class RegisterComponent {
 
         this.userService
             .register(isGuest, model.userName, isGuest ? null : model.password)
-            .subscribe(response => { });
+            .subscribe(response => {
+                if (response.success)
+                    this.router.navigate(["rooms"]);
+            });
     }
 }

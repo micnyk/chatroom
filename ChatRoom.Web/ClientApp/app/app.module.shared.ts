@@ -17,6 +17,7 @@ import { AppState } from "./services/api/appState";
 
 import { SignInGuard } from "./guards/signInGuard";
 import { RoomGuard } from "./guards/roomGuard";
+import { HomeGuard } from "./guards/homeGuard";
 
 import { ApiService } from "./services/api/apiService";
 import { UserService } from "./services/user/userService";
@@ -42,14 +43,14 @@ import { ChatService } from "./services/chat/chatService";
         ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
+            { path: 'home', component: HomeComponent, canActivate: [HomeGuard] },
             { path: 'rooms', component: RoomsComponent, canActivate: [SignInGuard] },
             { path: 'room/:id', component: RoomComponent, canActivate: [SignInGuard, RoomGuard] },
             { path: '**', redirectTo: 'home' }
         ]),
         CookieModule.forRoot()
     ],
-    providers: [SignInGuard, RoomGuard, AppState, UrlService, ApiService, UserService, RoomService, ChatService]
+    providers: [SignInGuard, RoomGuard, HomeGuard, AppState, UrlService, ApiService, UserService, RoomService, ChatService]
 })
 export class AppModuleShared {
 }
