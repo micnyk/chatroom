@@ -34,7 +34,7 @@
                     <ul class='nav navbar-nav'>
                         <li *ngFor="let room of appState.connectedRooms">
                             <a [routerLink]="['/room', room.id]">
-                                <span class="glyphicon glyphicon-arrow-right"></span> {{room.name}} ({{room.unreadMessages}})
+                                <span class="glyphicon glyphicon-arrow-right"></span> {{room.name}} ({{room.usersOnline}})
                             </a>
                         </li>
                     </ul>

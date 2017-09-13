@@ -1,8 +1,8 @@
 <h1>Chat rooms</h1>
 
-<p *ngIf="!rooms"><em>Loading...</em></p>
+<p *ngIf="!appState.rooms"><em>Loading...</em></p>
 
-<table class='table' *ngIf="rooms">
+<table class='table' *ngIf="appState.rooms">
     <thead>
         <tr>
             <th>Name</th>
@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let room of rooms">
+        <tr *ngFor="let room of appState.rooms">
             <td>{{ room.name }}</td>
             <td>{{ room.usersOnline }}</td>
             <td>

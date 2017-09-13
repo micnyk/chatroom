@@ -1,11 +1,10 @@
 ﻿import { Injectable, EventEmitter } from "@angular/core";
 import { CookieService } from "ngx-cookie";
-import { RoomDto } from "../room/responses";
-import { UserService } from "../user/userService";
+import { RoomDto, RoomsList } from "../room/responses";
 
 @Injectable()
 export class AppState {
-
+    rooms: RoomsList;
     currentUserId: string;
     loaded: boolean;
     signedIn: boolean;
@@ -14,6 +13,7 @@ export class AppState {
     setSignedInStateEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(private cookieService: CookieService) {
+        this.rooms = [];
         this.connectedRooms = [];
     }
 

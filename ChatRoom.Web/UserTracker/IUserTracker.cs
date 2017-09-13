@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChatRoom.Users.Dtos;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatRoom.Web.UserTracker
@@ -13,6 +12,8 @@ namespace ChatRoom.Web.UserTracker
 
         Task AddUser(HubConnectionContext connection, ChatUserDetails userDetails);
         Task RemoveUser(HubConnectionContext connection);
-        Task<IEnumerable<ChatUserDetails>> UsersOnline();
+        Task<List<ChatUserDetails>> UsersOnline();
+        Task<ChatUserDetails> GetUser(HubConnectionContext connection);
+        Task<bool> UserExistsInRoom(HubConnectionContext connection, string roomId);
     }
 }

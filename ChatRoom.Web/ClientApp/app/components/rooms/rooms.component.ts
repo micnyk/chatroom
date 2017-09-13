@@ -10,14 +10,12 @@ import { ChatService } from "../../services/chat/chatService";
 })
 export class RoomsComponent implements OnInit {
 
-    rooms: RoomsList;
-
     constructor(private appState: AppState, private roomService: RoomService, private chatService: ChatService) { }
 
     ngOnInit() {
         this.roomService
             .getAllRooms()
-            .subscribe(rooms => this.rooms = rooms);
+            .subscribe(rooms => this.appState.rooms = rooms);
     }
 
     canConnect(room: RoomDto): boolean {
@@ -28,6 +26,7 @@ export class RoomsComponent implements OnInit {
     }
 
     connect(room: RoomDto): void {
+        this.appState.connectedRooms = [];
         this.appState.connectedRooms.push(room);
         this.chatService.connectRoom(room.id);
     }

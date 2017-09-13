@@ -4,6 +4,7 @@ using ChatRoom.Domain.Repository;
 using ChatRoom.Infrastructure;
 using ChatRoom.Web.Extensions;
 using ChatRoom.Web.Hubs;
+using ChatRoom.Web.UserTracker;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,8 @@ namespace ChatRoom.Web
             services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
 
             services.AddSignalR();
+
+            services.AddSingleton<IUserTracker, InMemoryUserTracker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
