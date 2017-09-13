@@ -28,12 +28,19 @@ namespace ChatRoom.Rooms.Handlers
             if (!string.IsNullOrEmpty(query.Name))
                 q = q.Where(x => x.Name.Contains(query.Name));
 
-            return q.Select(x => new RoomDto
+            var result = new RoomsList();
+
+            result.AddRange(q
+                .Select(x => new RoomDto
                 {
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    UsersOnline = 0,
+                    UnreadMessages = 0
                 })
-                .ToList() as RoomsList;
+                .ToList());
+
+            return result;
         }
 
         public RoomDto Handle(GetRoomQuery query)

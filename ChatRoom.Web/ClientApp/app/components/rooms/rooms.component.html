@@ -1,0 +1,23 @@
+<h1>Chat rooms</h1>
+
+<p *ngIf="!rooms"><em>Loading...</em></p>
+
+<table class='table' *ngIf="rooms">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Users online</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let room of rooms">
+            <td>{{ room.name }}</td>
+            <td>{{ room.usersOnline }}</td>
+            <td>
+                <button *ngIf="canConnect(room)" (click)="connect(room)" class="btn btn-default">Connect</button>
+                <button *ngIf="canDisconnect(room)" (click)="disconnect(room)" class="btn btn-default">Disconnect</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

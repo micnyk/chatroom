@@ -17,20 +17,27 @@
                         <span class='glyphicon glyphicon-home'></span> Home
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                <li *ngIf="appState.signedIn" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/rooms']">
+                        <span class='glyphicon glyphicon-th-list'></span> Chat rooms
                     </a>
                 </li>
                 <li *ngIf="appState.signedIn">
                     <a href="#" (click)="signOut()">
                         <span class="glyphicon glyphicon-log-out"></span> Logout
                     </a>
+                </li>
+                <li *ngIf="appState.connectedRooms.length > 0">
+                    <p class="navbar-text"><span class="glyphicon glyphicon-inbox"></span> Chat Rooms</p>
+                </li>
+                <li>
+                    <ul class='nav navbar-nav'>
+                        <li *ngFor="let room of appState.connectedRooms">
+                            <a [routerLink]="['/room', room.id]">
+                                <span class="glyphicon glyphicon-arrow-right"></span> {{room.name}} ({{room.unreadMessages}})
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

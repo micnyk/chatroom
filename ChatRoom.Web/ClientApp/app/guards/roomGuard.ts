@@ -4,12 +4,15 @@ import { AppState } from "../services/api/appState";
 import { Injectable } from "@angular/core";
 
 @Injectable()
-export class SignInGuard implements CanActivate {
+export class RoomGuard implements CanActivate {
 
     constructor(private appState: AppState) {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.appState.signedIn;
+        return this.appState.connectedRooms
+            .filter(r => r.id === route.params["id"])
+            .length > 0;
+
     }
 }

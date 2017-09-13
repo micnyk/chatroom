@@ -63,10 +63,7 @@ namespace ChatRoom.Web
         {
             AppServiceProvider.Provider = app.ApplicationServices;
 
-            using (var dbContext = new DesignTimeDbContextFactory().CreateDbContext(null))
-            {
-                dbContext.Database.Migrate();
-            }
+            app.DatabaseMigrateSeed();
 
             if (env.IsDevelopment())
             {

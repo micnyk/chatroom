@@ -10,25 +10,33 @@ export class ApiService {
 
     constructor(private urlService: UrlService, private http: Http) { }
 
-    post(action: string, data: any): any {
+    post<T>(action: string, data: any): Observable<T> {
         return this.http
             .post(this.urlService.apiUrl(action), data)
-            .map(response => {
-                const requestResponse = response.json() as RequestResponse;
-
-                if (requestResponse == null)
-                    throw new Error("Invalid server response");
-
-                if (requestResponse.responseResult === RequestResult.Error) {
-                    this.printErrors(requestResponse.messages);
-                } else if (requestResponse.responseResult === RequestResult.ModelNotValid) {
-                    this.printValidationErrors(requestResponse.data);
-                }
-                return requestResponse.data;
-            });
+            .map(response => this.handleResponse(response));
     }
 
-    printErrors(messages: string[]): void {
+    get<T>(action: string): Observable<T> {
+        return this.http
+            .get(this.urlService.apiUrl(action))
+            .map(response => this.handleResponse(response));
+    }
+
+    private handleResponse(response: any) {
+        const requestResponse = (response.json()) as RequestResponse;
+
+        if (requestResponse == null)
+            throw new Error("Invalid server response");
+
+        if (requestResponse.responseResult === RequestResult.Error) {
+            this.printErrors(requestResponse.messages);
+        } else if (requestResponse.responseResult === RequestResult.ModelNotValid) {
+            this.printValidationErrors(requestResponse.data);
+        }
+        return requestResponse.data;
+    }
+
+    private printErrors(messages: string[]): void {
         console.log(messages);
 
         let output = "";
@@ -36,7 +44,7 @@ export class ApiService {
         alert(output);
     }
 
-    printValidationErrors(data: Array<any>): void {
+    private printValidationErrors(data: Array<any>): void {
         console.log(data);
 
         let output = "";

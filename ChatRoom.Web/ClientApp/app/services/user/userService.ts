@@ -5,7 +5,7 @@ import { RegisterResult, SignInResult, SignOutResult } from "./responses";
 import { Observable } from "rxjs/Observable";
 import { AppState } from "../api/appState";
 import { CookieService } from "ngx-cookie";
-import {UserDto} from "../../dtos/user";
+import { UserDto } from "../../dtos/user";
 
 @Injectable()
 export class UserService {

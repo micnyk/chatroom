@@ -8,10 +8,10 @@ import { CookieModule } from 'ngx-cookie';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { SignInComponent } from "./components/signin/signin.component";
 import { RegisterComponent } from "./components/register/register.component";
+import { RoomsComponent } from "./components/rooms/rooms.component";
+import { RoomComponent } from "./components/room/room.component";
 
 import { AppState } from "./services/api/appState";
 
@@ -20,14 +20,16 @@ import { SignInGuard } from "./guards/signInGuard";
 import { ApiService } from "./services/api/apiService";
 import { UserService } from "./services/user/userService";
 import { UrlService } from "./services/url/urlService";
+import { RoomService } from "./services/room/roomService";
+import {RoomGuard} from "./guards/roomGuard";
 
 
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
+        RoomsComponent,
+        RoomComponent,
         HomeComponent,
         SignInComponent,
         RegisterComponent
@@ -39,14 +41,14 @@ import { UrlService } from "./services/url/urlService";
         ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent, canActivate: [SignInGuard] },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
+            { path: 'home', component: HomeComponent },
+            { path: 'rooms', component: RoomsComponent, canActivate: [SignInGuard] },
+            { path: 'room/:id', component: RoomComponent, canActivate: [SignInGuard, RoomGuard] },
             { path: '**', redirectTo: 'home' }
         ]),
         CookieModule.forRoot()
     ],
-    providers: [AppState, SignInGuard, UrlService, ApiService, UserService]
+    providers: [SignInGuard, RoomGuard, AppState, UrlService, ApiService, UserService, RoomService]
 })
 export class AppModuleShared {
 }

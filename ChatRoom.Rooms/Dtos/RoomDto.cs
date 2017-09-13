@@ -9,5 +9,7 @@ namespace ChatRoom.Rooms.Dtos
         public string Name { get; set; }
 
         public int UsersOnline { get; set; }
+
+        public int UnreadMessages { get; set; }
     }
 }
