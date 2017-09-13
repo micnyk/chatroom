@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using ChatRoom.Domain.Entities.User;
+using ChatRoom.Domain.Entities.Users;
 using ChatRoom.Infrastructure.CQS.Query;
 using ChatRoom.Users.Dtos;
 using ChatRoom.Users.Queries;

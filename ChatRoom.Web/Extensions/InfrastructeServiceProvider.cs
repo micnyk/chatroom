@@ -1,6 +1,9 @@
 ﻿using ChatRoom.Infrastructure;
 using ChatRoom.Infrastructure.CQS.Command;
 using ChatRoom.Infrastructure.CQS.Query;
+using ChatRoom.Rooms.Dtos;
+using ChatRoom.Rooms.Handlers;
+using ChatRoom.Rooms.Queries;
 using ChatRoom.Users.Commands;
 using ChatRoom.Users.Dtos;
 using ChatRoom.Users.Handlers;
@@ -19,6 +22,9 @@ namespace ChatRoom.Web.Extensions
             services.AddTransient<ICommandHandler<SignInCommand, SignInResult>, UserCommandsHandler>();
             services.AddTransient<ICommandHandler<SignOutCommand, SignOutResult>, UserCommandsHandler>();
             services.AddTransient<IQueryHandler<CheckUserNameUniquenessQuery, CheckUserNameUniquenessResult>, UserQueriesHandler>();
+
+            services.AddTransient<IQueryHandler<GetRoomsQuery, RoomsList>, RoomsQueriesHandler>();
+            services.AddTransient<IQueryHandler<GetRoomQuery, RoomDto>, RoomsQueriesHandler>();
 
             return services;
         }

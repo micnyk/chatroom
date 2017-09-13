@@ -1,5 +1,6 @@
 using ChatRoom.Domain;
-using ChatRoom.Domain.Entities.User;
+using ChatRoom.Domain.Entities.Users;
+using ChatRoom.Domain.Repository;
 using ChatRoom.Infrastructure;
 using ChatRoom.Web.Extensions;
 using FluentValidation;
@@ -45,6 +46,8 @@ namespace ChatRoom.Web
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddInfrastructure();
 

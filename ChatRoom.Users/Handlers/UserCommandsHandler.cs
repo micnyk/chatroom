@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ChatRoom.Domain.Entities.User;
+using ChatRoom.Domain.Entities.Users;
 using ChatRoom.Infrastructure.CQS.Command;
 using ChatRoom.Users.Commands;
 using ChatRoom.Users.Dtos;
