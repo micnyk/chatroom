@@ -24,6 +24,7 @@ import { UserService } from "./services/user/userService";
 import { UrlService } from "./services/url/urlService";
 import { RoomService } from "./services/room/roomService";
 import { ChatService } from "./services/chat/chatService";
+import {EmojiService} from "./services/emoji/emojiService";
 
 
 @NgModule({
@@ -50,7 +51,7 @@ import { ChatService } from "./services/chat/chatService";
         ]),
         CookieModule.forRoot()
     ],
-    providers: [SignInGuard, RoomGuard, HomeGuard, AppState, UrlService, ApiService, UserService, RoomService, ChatService]
+    providers: [SignInGuard, RoomGuard, HomeGuard, AppState, UrlService, ApiService, UserService, RoomService, ChatService, EmojiService]
 })
 export class AppModuleShared {
 }

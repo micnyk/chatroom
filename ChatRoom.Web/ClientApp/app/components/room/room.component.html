@@ -8,7 +8,7 @@
 
     <div class="chat">
         <ul>
-            <li *ngFor="let message of messages">{{message.userName}}: {{message.message}}</li>
+            <li *ngFor="let message of messages">{{message.userName}}: <span [innerHtml]="message.message"></span></li>
         </ul>
     </div>
 

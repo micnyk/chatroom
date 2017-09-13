@@ -7,6 +7,7 @@ import { ChatService } from "../../services/chat/chatService";
 import { Subscription } from "rxjs/Subscription";
 import { ChatMessage } from "../../services/chat/chatMessage";
 import { ChatUserDetails } from "../../services/chat/chatUserDetails";
+import { EmojiService } from "../../services/emoji/emojiService";
 
 @Component({
     selector: 'room',
@@ -23,7 +24,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     roomUsers: Array<ChatUserDetails> = [];
 
     constructor(private route: ActivatedRoute, private appState: AppState, private roomService: RoomService,
-        private chatService: ChatService) { }
+        private chatService: ChatService, private emojiService: EmojiService) { }
 
     ngOnInit() {
         this.route.params.subscribe(params => {
@@ -58,8 +59,10 @@ export class RoomComponent implements OnInit, OnDestroy {
     }
 
     private displayMessage(message: ChatMessage) {
-        if (message != null && message.roomId === this.room.id)
+        if (message != null && message.roomId === this.room.id) {
+            message = this.emojiService.parseMessage(message);
             this.messages.push(message);
+        }
     }
 }
 
