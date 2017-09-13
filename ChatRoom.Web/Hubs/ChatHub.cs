@@ -6,7 +6,6 @@ using ChatRoom.Infrastructure;
 using ChatRoom.Rooms.Queries;
 using ChatRoom.Web.Extensions;
 using ChatRoom.Web.UserTracker;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatRoom.Web.Hubs
@@ -65,6 +64,18 @@ namespace ChatRoom.Web.Hubs
 
             await SendRoomUsers(roomId, usersOnline);
             await SendRoomsOnlineUsers(usersOnline);
+        }
+
+        public async Task Send(string roomId, string message)
+        {
+            var onlineUsers = await _userTracker.UsersOnline();
+            var roomUsers = onlineUsers.Where(x => x.RoomId == roomId).ToList();
+
+            foreach (var user in roomUsers)
+            {
+                var context = await _userTracker.GetUserContext(user);
+                await Clients.Client(context.ConnectionId).InvokeAsync("Message", message, Context.User.Identity.Name);
+            }
         }
 
         private async Task SendRoomUsers(string roomId, IList<ChatUserDetails> usersOnline)

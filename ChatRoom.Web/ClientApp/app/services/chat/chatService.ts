@@ -4,6 +4,8 @@ import { Injectable } from "@angular/core";
 import { ChatUserDetails } from "./chatUserDetails";
 import { ChatRoomDetails } from "./chatRoomDetails";
 import { AppState } from "../api/appState";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ChatMessage } from "./chatMessage";
 
 @Injectable()
 export class ChatService {
@@ -13,6 +15,9 @@ export class ChatService {
     private hubConnection: HubConnection;
     private httpConnection: HttpConnection;
     private consoleLogger: ConsoleLogger;
+
+    private messagesSubject: BehaviorSubject<ChatMessage> = new BehaviorSubject(<any>null);
+    messageObservable = this.messagesSubject.asObservable();
 
     connectSignalR(): void {
         this.disconnectSignalR();
@@ -40,6 +45,10 @@ export class ChatService {
                     room.usersOnline = roomDetails.UsersOnline;
             });
         });
+
+        this.hubConnection.on("Message", (message: string, userName: string) => {
+            this.messagesSubject.next(new ChatMessage(userName, message));
+        });
     }
 
     disconnectSignalR() {
@@ -52,5 +61,9 @@ export class ChatService {
 
     connectRoom(roomId: string): void {
         this.hubConnection.invoke("ConnectRoom", roomId);
+    }
+
+    sendMessage(roomId: string, message: string): void {
+        this.hubConnection.invoke("Send", roomId, message);
     }
 }

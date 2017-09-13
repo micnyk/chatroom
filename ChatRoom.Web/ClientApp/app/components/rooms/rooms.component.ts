@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RoomsList, RoomDto } from "../../services/room/responses";
+import { RoomDto } from "../../services/room/responses";
 import { RoomService } from "../../services/room/roomService";
 import { AppState } from "../../services/api/appState";
 import { ChatService } from "../../services/chat/chatService";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'rooms',
@@ -10,7 +11,7 @@ import { ChatService } from "../../services/chat/chatService";
 })
 export class RoomsComponent implements OnInit {
 
-    constructor(private appState: AppState, private roomService: RoomService, private chatService: ChatService) { }
+    constructor(private appState: AppState, private roomService: RoomService, private chatService: ChatService, private router: Router) { }
 
     ngOnInit() {
         this.roomService
@@ -29,6 +30,7 @@ export class RoomsComponent implements OnInit {
         this.appState.connectedRooms = [];
         this.appState.connectedRooms.push(room);
         this.chatService.connectRoom(room.id);
+        this.router.navigate(["room", room.id]);
     }
 
     canDisconnect(room: RoomDto): boolean {

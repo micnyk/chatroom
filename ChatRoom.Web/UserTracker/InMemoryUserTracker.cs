@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChatRoom.Users.Dtos;
 using ChatRoom.Web.Extensions;
 using Microsoft.AspNetCore.SignalR;
 
@@ -13,9 +12,6 @@ namespace ChatRoom.Web.UserTracker
     {
         private readonly ConcurrentDictionary<HubConnectionContext, ChatUserDetails> _usersOnline
             = new ConcurrentDictionary<HubConnectionContext, ChatUserDetails>();
-
-        public event Action<ChatUserDetails[]> UsersJoined;
-        public event Action<ChatUserDetails[]> UsersLeft;
 
         public Task<List<ChatUserDetails>> UsersOnline() => Task.FromResult(_usersOnline.Values.ToList());
 
@@ -27,25 +23,23 @@ namespace ChatRoom.Web.UserTracker
 
         public Task<bool> UserExistsInRoom(HubConnectionContext connection, string roomId)
         {
-            return Task.FromResult(_usersOnline.Values.Any(x => x.UserId == connection.User.GetUserId()));
+            return Task.FromResult(_usersOnline.Values.Any(x => x.RoomId == roomId && x.UserId == connection.User.GetUserId()));
+        }
+
+        public Task<HubConnectionContext> GetUserContext(ChatUserDetails user)
+        {
+            return Task.FromResult(_usersOnline.FirstOrDefault(x => x.Value == user).Key);
         }
 
         public Task AddUser(HubConnectionContext connection, ChatUserDetails userDetails)
         {
             _usersOnline.TryAdd(connection, userDetails);
-
-            UsersJoined?.Invoke(new[] { userDetails });
-
             return Task.CompletedTask;
         }
 
         public Task RemoveUser(HubConnectionContext connection)
         {
-            if (_usersOnline.TryRemove(connection, out var userDetails))
-            {
-                UsersLeft?.Invoke(new[] { userDetails });
-            }
-
+            _usersOnline.TryRemove(connection, out var userDetails);
             return Task.CompletedTask;
         }
     }

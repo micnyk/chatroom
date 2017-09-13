@@ -1,2 +1,15 @@
 <h1>{{room.name}}</h1>
 <h3>{{room.usersOnline}} users online</h3>
+
+<div class="chat">
+    <ul>
+        <li *ngFor="let message of messages">{{message.userName}}: {{message.message}}</li>
+    </ul>
+</div>
+
+<div class="input-group">
+    <input type="text" class="form-control" [(ngModel)]="message" (keyup.enter)="sendMessage()" />
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" (click)="sendMessage()">Send</button>
+    </span>
+</div>
