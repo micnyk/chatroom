@@ -16,12 +16,13 @@ import { RoomComponent } from "./components/room/room.component";
 import { AppState } from "./services/api/appState";
 
 import { SignInGuard } from "./guards/signInGuard";
+import { RoomGuard } from "./guards/roomGuard";
 
 import { ApiService } from "./services/api/apiService";
 import { UserService } from "./services/user/userService";
 import { UrlService } from "./services/url/urlService";
 import { RoomService } from "./services/room/roomService";
-import {RoomGuard} from "./guards/roomGuard";
+import { ChatService } from "./services/chat/chatService";
 
 
 @NgModule({
@@ -48,7 +49,7 @@ import {RoomGuard} from "./guards/roomGuard";
         ]),
         CookieModule.forRoot()
     ],
-    providers: [SignInGuard, RoomGuard, AppState, UrlService, ApiService, UserService, RoomService]
+    providers: [SignInGuard, RoomGuard, AppState, UrlService, ApiService, UserService, RoomService, ChatService]
 })
 export class AppModuleShared {
 }

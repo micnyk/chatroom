@@ -7,8 +7,7 @@ import { Observable } from "rxjs/Observable";
 @Injectable()
 export class RoomService {
 
-    constructor(private appState: AppState, private apiService: ApiService) {
-    }
+    constructor(private appState: AppState, private apiService: ApiService) { }
 
     getRoom(id: string): Observable<RoomDto> {
         return this.apiService

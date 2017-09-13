@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from "../../services/api/appState";
+import { UserService } from "../../services/user/userService";
 
 @Component({
     selector: 'app',
@@ -8,10 +9,11 @@ import { AppState } from "../../services/api/appState";
 })
 export class AppComponent implements OnInit {
 
-    constructor(private appState: AppState) {
+    constructor(private appState: AppState, private userService: UserService) {
     }
 
     ngOnInit(): void {
+        this.userService.init();
         this.appState.init();
     }
 }

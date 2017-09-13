@@ -1,8 +1,10 @@
 ﻿using ChatRoom.Rooms.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoom.Web.Controllers
 {
+    [Authorize]
     [Route("/api/rooms")]
     public class RoomsController : BaseController
     {

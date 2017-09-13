@@ -5,12 +5,22 @@ import { RegisterResult, SignInResult, SignOutResult } from "./responses";
 import { Observable } from "rxjs/Observable";
 import { AppState } from "../api/appState";
 import { CookieService } from "ngx-cookie";
-import { UserDto } from "../../dtos/user";
+import { ChatService } from "../chat/chatService";
 
 @Injectable()
 export class UserService {
 
-    constructor(private apiService: ApiService, private appState: AppState, private cookieService: CookieService) { }
+    constructor(private apiService: ApiService,
+        private appState: AppState,
+        private cookieService: CookieService,
+        private chatService: ChatService) {
+    }
+
+    init() {
+        this.appState.setSignedInStateEvent.subscribe((userId: string) => {
+            this.setSignedInState(userId);
+        });
+    }
 
     register(isGuest: boolean, userName: string, password: string): Observable<RegisterResult> {
         return this.apiService
@@ -19,7 +29,7 @@ export class UserService {
                 const registerResult = result as RegisterResult;
 
                 if (registerResult.success)
-                    this.setSignedInState(registerResult.user);
+                    this.setSignedInState(registerResult.user.id);
 
                 return result as RegisterResult;
             });
@@ -32,7 +42,7 @@ export class UserService {
                 const signInResult = result as SignInResult;
 
                 if (signInResult.success)
-                    this.setSignedInState(signInResult.user);
+                    this.setSignedInState(signInResult.user.id);
 
                 return signInResult;
             });
@@ -43,7 +53,8 @@ export class UserService {
         this.cookieService.remove("signedIn");
 
         this.appState.signedIn = false;
-        this.appState.currentUser = <any>null;
+        this.appState.currentUserId = <any>null;
+        this.chatService.disconnectSignalR();
 
         return this.apiService
             .post("user/signOut", new SignOutCommand())
@@ -57,9 +68,10 @@ export class UserService {
         this.cookieService.putObject("signedIn", userId, { expires: expires });
     }
 
-    private setSignedInState(user: UserDto) {
-        this.setSignedInCookie(user.id);
+    setSignedInState(userId: string) {
+        this.setSignedInCookie(userId);
         this.appState.signedIn = true;
-        this.appState.currentUser = user;
+        this.appState.currentUserId = userId;
+        this.chatService.connectSignalR();
     }
 }

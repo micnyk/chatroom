@@ -1,26 +1,28 @@
-﻿import { Injectable } from "@angular/core";
+﻿import { Injectable, EventEmitter } from "@angular/core";
 import { CookieService } from "ngx-cookie";
-import { UserDto } from "../../dtos/user";
-import {RoomDto} from "../room/responses";
+import { RoomDto } from "../room/responses";
+import { UserService } from "../user/userService";
 
 @Injectable()
 export class AppState {
 
-    currentUser: UserDto;
+    currentUserId: string;
     loaded: boolean;
     signedIn: boolean;
     connectedRooms: Array<RoomDto>;
+
+    setSignedInStateEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(private cookieService: CookieService) {
         this.connectedRooms = [];
     }
 
     init(): void {
-        const identityCookie = this.cookieService.getObject("signedIn") as boolean;
+        const identityCookie = this.cookieService.getObject("signedIn") as string;
 
         if (identityCookie != null && identityCookie)
-            this.signedIn = true;
-
+            this.setSignedInStateEvent.emit(identityCookie);
+            
         this.loaded = true;
     }
 }
