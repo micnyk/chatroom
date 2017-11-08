@@ -6,5 +6,5 @@ import { AppState } from "../../services/api/appState";
     templateUrl: './home.component.html'
 })
 export class HomeComponent {
-    constructor(private appState: AppState) { }
+    constructor(public appState: AppState) { }
 }

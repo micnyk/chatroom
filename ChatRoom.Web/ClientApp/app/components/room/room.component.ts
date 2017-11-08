@@ -23,7 +23,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     roomUsersSubscription: Subscription;
     roomUsers: Array<ChatUserDetails> = [];
 
-    constructor(private route: ActivatedRoute, private appState: AppState, private roomService: RoomService,
+    constructor(private route: ActivatedRoute, public appState: AppState, private roomService: RoomService,
         private chatService: ChatService, private emojiService: EmojiService) { }
 
     ngOnInit() {

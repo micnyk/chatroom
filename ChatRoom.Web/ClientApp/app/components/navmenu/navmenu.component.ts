@@ -8,7 +8,7 @@ import {UserService} from "../../services/user/userService";
     styleUrls: ['./navmenu.component.css']
 })
 export class NavMenuComponent {
-    constructor(private appState: AppState, private userSerivce: UserService) { }
+    constructor(public appState: AppState, private userSerivce: UserService) { }
 
     signOut(): void {
         this.userSerivce

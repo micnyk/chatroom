@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 })
 export class RoomsComponent implements OnInit {
 
-    constructor(private appState: AppState, private roomService: RoomService, private chatService: ChatService, private router: Router) { }
+    constructor(public appState: AppState, private roomService: RoomService, private chatService: ChatService, private router: Router) { }
 
     ngOnInit() {
         this.roomService
