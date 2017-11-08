@@ -14,9 +14,4 @@
     <ProjectReference Include="..\ChatRoom.Infrastructure\ChatRoom.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Identity.Core">
-    </Reference>
-  </ItemGroup>
-
 </Project>

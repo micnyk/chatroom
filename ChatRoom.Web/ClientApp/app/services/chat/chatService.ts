@@ -33,7 +33,7 @@ export class ChatService {
 
         this.hubConnection = new HubConnection(this.httpConnection);
 
-        this.hubConnection.onClosed = e => { console.log(e); };
+        this.hubConnection.onclose = e => { console.log(e); };
 
         this.hubConnection.start().catch(err => console.log(err));
 
