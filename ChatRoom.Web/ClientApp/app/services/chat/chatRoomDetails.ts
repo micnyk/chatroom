@@ -1,4 +1,4 @@
 ﻿export class ChatRoomDetails {
-    RoomId: string;
-    UsersOnline: number;
+    roomId: string;
+    usersOnline: number;
 }

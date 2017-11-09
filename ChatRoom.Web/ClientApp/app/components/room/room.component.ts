@@ -38,7 +38,7 @@ export class RoomComponent implements OnInit, OnDestroy {
         this.roomUsersSubscription = this.chatService
             .roomUsersObservable
             .subscribe(user => {
-                if (user != null && this.roomUsers.filter(u => u.UserId === user.UserId).length === 0)
+                if (user != null && this.roomUsers.filter(u => u.userId === user.userId).length === 0)
                     this.roomUsers.push(user);
             });
     }

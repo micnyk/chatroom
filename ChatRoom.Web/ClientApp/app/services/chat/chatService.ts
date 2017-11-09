@@ -10,7 +10,7 @@ import { ChatMessage } from "./chatMessage";
 @Injectable()
 export class ChatService {
 
-    constructor(private appState: AppState) { }
+    constructor(public appState: AppState) { }
 
     private hubConnection: HubConnection;
     private httpConnection: HttpConnection;
@@ -43,9 +43,9 @@ export class ChatService {
 
         this.hubConnection.on("RoomsOnlineUsers", (roomsDetails: Array<ChatRoomDetails>) => {
             this.appState.rooms.forEach(room => {
-                const roomDetails = roomsDetails.filter(r => r.RoomId === room.id)[0];
+                const roomDetails = roomsDetails.filter(r => r.roomId === room.id)[0];
                 if (roomDetails != null)
-                    room.usersOnline = roomDetails.UsersOnline;
+                    room.usersOnline = roomDetails.usersOnline;
             });
         });
 

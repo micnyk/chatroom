@@ -9,9 +9,11 @@ namespace ChatRoom.Domain
     {
         public ApplicationDbContext CreateDbContext(string[] args)
         {
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
                 .Build();
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
